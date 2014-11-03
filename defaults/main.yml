@@ -290,7 +290,7 @@ aspects_apache24_default_vhosts:
   default:
     Debian:
       enable: False
-      file: "default.conf"
+      file: "000-default.conf"
   defaultssl:
     Debian:
       enable: False

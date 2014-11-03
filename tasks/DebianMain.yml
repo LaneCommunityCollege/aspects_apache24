@@ -67,7 +67,7 @@
 - name: Set httpd.conf template
   template:
     src="httpd.conf.j2"
-    dest="/etc/apache2/httpd.conf"
+    dest="/etc/apache2/conf-enabled/httpd.conf"
     mode=644
     owner=0
     group=0
