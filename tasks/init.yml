@@ -1,0 +1,18 @@
+---
+# tasks file for aspects_apache24
+
+- include: installPackages.yml
+  tags:
+  - aspects_apache24
+
+- include: DebianMain.yml
+  when:
+    (ansible_distribution == "Ubuntu" and ansible_distribution_version == "14.04")
+  tags:
+  - aspects_apache24
+
+- include: RedHatMain.yml
+  when:
+    (ansible_os_family == "RedHat" and ansible_distribution_major_version == "6")
+  tags:
+  - aspects_apache24

@@ -1,0 +1,46 @@
+---
+# Run tasks on RedHat style systems.
+
+# Enable modules
+- name: RedHat - Enable modules
+  when: item.value.RedHat is defined and item.value.RedHat.enable == True
+  lineinfile:
+    state="present"
+    line="{{ item.value.RedHat.loadmoduleline }}"
+    dest="{{ item.value.RedHat.targetfile }}"
+  with_dict: aspects_apache24_mods
+  notify: restart httpd
+  tags:
+  - aspects_apache24
+  - aspects_apache24_httpdconf
+
+# Disable modules
+- name: RedHat - Disable modules
+  when: item.value.RedHat is defined and item.value.RedHat.enable == False
+  lineinfile:
+    state="absent"
+    line="{{ item.value.RedHat.loadmoduleline }}"
+    dest="{{ item.value.RedHat.targetfile }}"
+  with_dict: aspects_apache24_mods
+  notify: restart httpd
+  tags:
+  - aspects_apache24
+  - aspects_apache24_httpdconf
+
+# Set httpd.conf template
+# This file contains all the overrides for apache settings
+# set in the aspects_apache24_httpdconf variable.
+# It also contains module and vhost config from aspects_apache24_vhosts.
+# Named the dest file 9999custom.conf in an effort to make sure it loads
+# last, so that it overrides any previous configuration. Need to test this...
+- name: RedHat - Set httpd.conf template
+  template:
+    src="httpd.conf.j2"
+    dest="/etc/httpd/conf.d/9999custom.conf"
+    mode=644
+    owner=0
+    group=0
+  notify: restart httpd
+  tags:
+  - aspects_apache24
+  - aspects_apache24_httpdconf

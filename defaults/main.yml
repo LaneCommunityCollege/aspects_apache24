@@ -1,0 +1,459 @@
+---
+# defaults file for aspects_apache24
+
+# Disable this role by default.
+aspects_apache24_enabled: false
+
+# The only package that should be installed by default is
+# the main apache 2.2 package.
+# TODO: Check that differences and similarities between Debian and RedHat are fully accounted for.
+aspects_apache24_packages:
+  apache2mpmworker:
+    state: "default"
+    Debian: "apache2-mpm-worker"
+  apache2:
+    state: "present"
+    Debian: "apache2"
+    RedHat: "httpd"
+  apache2mpmevent:
+    state: "default"
+    Debian: "apache2-mpm-event"
+  apache2mpmprefork:
+    state: "default"
+    Debian: "apache2-mpm-prefork"
+  apache2dev:
+    state: "default"
+    Debian: "apache2-dev"
+    RedHat: "httpd-devel"
+  apache2-doc:
+    state: "default"
+    Debian: "apache2-doc"
+    RedHat: "httpd-manual"
+  apache2mpmitk:
+    state: "default"
+    Debian: "apache2-mpm-itk"
+  apache2preforkdev:
+    state: "default"
+    Debian: "apache2-prefork-dev"
+  apache2suexec:
+    state: "default"
+    Debian: "apache2-suexec"
+  apache2suexeccustom:
+    state: "default"
+    Debian: "apache2-suexec-custom"
+  apache2threadeddev:
+    state: "default"
+    Debian: "apache2-threaded-dev"
+  apache2utils:
+    state: "default"
+    Debian: "apache2-utils"
+    RedHat: "httpd-tools"
+  apache24bin:
+    state: "default"
+    Debian: "apache2-bin"
+  apache24common:
+    state: "default"
+    Debian: "apache2-common"
+  modauthmysql:
+    state: "default"
+    RedHat: "mod_auth_mysql"
+  modauthpgsql:
+    state: "default"
+    RedHat: "mod_auth_pgsql"
+  modauthzldap:
+    state: "default"
+    RedHat: "mod_authz_ldap"
+  moddavsvn:
+    state: "default"
+    RedHat: "mod_dav_svn"
+  modperl:
+    state: "default"
+    RedHat: "mod_perl"
+  modssl:
+    state: "default"
+    RedHat: "mod_ssl"
+  authcassimpleperl:
+    state: "default"
+    Debian: "libapache2-authcassimple-perl"
+  authcookieperl:
+    state: "default"
+    Debian: "libapache2-authcookie-perl"
+  authenntlmperl:
+    state: "default"
+    Debian: "libapache2-authenntlm-perl"
+  modapparmor:
+    state: "default"
+    Debian: "libapache2-mod-apparmor"
+  modapreq2:
+    state: "default"
+    Debian: "libapache2-mod-apreq2"
+  modauthcas:
+    state: "default"
+    Debian: "libapache2-mod-auth-cas"
+  modauthkerb:
+    state: "default"
+    Debian: "libapache2-mod-auth-kerb"
+    RedHat: "mod_auth_kerb"
+  modauthmysql:
+    state: "default"
+    Debian: "libapache2-mod-auth-mysql"
+  modauthntlmwinbind:
+    state: "default"
+    Debian: "libapache2-mod-auth-ntlm-winbind"
+  modauthopenid:
+    state: "default"
+    Debian: "libapache2-mod-auth-openid"
+  modauthpgsql:
+    state: "default"
+    Debian: "libapache2-mod-auth-pgsql"
+  modauthplain:
+    state: "default"
+    Debian: "libapache2-mod-auth-plain"
+  modauthradius:
+    state: "default"
+    Debian: "libapache2-mod-auth-radius"
+  modauthnsasl:
+    state: "default"
+    Debian: "libapache2-mod-authn-sasl"
+  modauthnwebid:
+    state: "default"
+    Debian: "libapache2-mod-authn-webid"
+  modauthnyubikey:
+    state: "default"
+    Debian: "libapache2-mod-authn-yubikey"
+  modauthnzexternal:
+    state: "default"
+    Debian: "libapache2-mod-authnz-external"
+  modauthzunixgroup:
+    state: "default"
+    Debian: "libapache2-mod-authz-unixgroup"
+  modaxis2c:
+    state: "default"
+    Debian: "libapache2-mod-axis2c"
+  modbw:
+    state: "default"
+    Debian: "libapache2-mod-bw"
+  moddefensible:
+    state: "default"
+    Debian: "libapache2-mod-defensible"
+  moddnssd:
+    state: "default"
+    Debian: "libapache2-mod-dnssd"
+    RedHat: "mod_dnssd"
+  modencoding:
+    state: "default"
+    Debian: "libapache2-mod-encoding"
+  modevasive:
+    state: "default"
+    Debian: "libapache2-mod-evasive"
+  modfastcgi:
+    state: "default"
+    Debian: "libapache2-mod-fastcgi"
+  modfcgid:
+    state: "default"
+    Debian: "libapache2-mod-fcgid"
+  modfcgiddbg:
+    state: "default"
+    Debian: "libapache2-mod-fcgid-dbg"
+  modgeoip:
+    state: "default"
+    Debian: "libapache2-mod-geoip"
+  modgnutls:
+    state: "default"
+    Debian: "libapache2-mod-gnutls"
+  modjk:
+    state: "default"
+    Debian: "libapache2-mod-jk"
+  modldapuserdir:
+    state: "default"
+    Debian: "libapache2-mod-ldap-userdir"
+  modldapuserdirdbg:
+    state: "default"
+    Debian: "libapache2-mod-ldap-userdir-dbg"
+  modlisp:
+    state: "default"
+    Debian: "libapache2-mod-lisp"
+  modlogsql:
+    state: "default"
+    Debian: "libapache2-mod-log-sql"
+  modlogsqldbi:
+    state: "default"
+    Debian: "libapache2-mod-log-sql-dbi"
+  modlogsqlmysql:
+    state: "default"
+    Debian: "libapache2-mod-log-sql-mysql"
+  modlogsqlssl:
+    state: "default"
+    Debian: "libapache2-mod-log-sql-ssl"
+  modmacro:
+    state: "default"
+    Debian: "libapache2-mod-macro"
+  modmimexattr:
+    state: "default"
+    Debian: "libapache2-mod-mime-xattr"
+  modmono:
+    state: "default"
+    Debian: "libapache2-mod-mono"
+  modmusicindex:
+    state: "default"
+    Debian: "libapache2-mod-musicindex"
+  modneko:
+    state: "default"
+    Debian: "libapache2-mod-neko"
+  modnss:
+    state: "default"
+    Debian: "libapache2-mod-nss"
+    RedHat: "mod_nss"
+  modocamlnet:
+    state: "default"
+    Debian: "libapache2-mod-ocamlnet"
+  modparser3:
+    state: "default"
+    Debian: "libapache2-mod-parser3"
+  modpassenger:
+    state: "default"
+    Debian: "libapache2-mod-passenger"
+  modperl2:
+    state: "default"
+    Debian: "libapache2-mod-perl2"
+  modperl2dev:
+    state: "default"
+    Debian: "libapache2-mod-perl2-dev"
+    RedHat: "mod_perl-devel"
+  modperl2doc:
+    state: "default"
+    Debian: "libapache2-mod-perl2-doc"
+  modphp5:
+    state: "default"
+    Debian: "libapache2-mod-php5"
+  modphp5filter:
+    state: "default"
+    Debian: "libapache2-mod-php5filter"
+  modproxyhtml:
+    state: "default"
+    Debian: "libapache2-mod-proxy-html"
+  modpython:
+    state: "default"
+    Debian: "libapache2-mod-python"
+  modpythondoc:
+    state: "default"
+    Debian: "libapache2-mod-python-doc"
+  modqos:
+    state: "default"
+    Debian: "libapache2-mod-qos"
+  modremoveip:
+    state: "default"
+    Debian: "libapache2-mod-removeip"
+  modrivet:
+    state: "default"
+    Debian: "libapache2-mod-rivet"
+  modrivetdoc:
+    state: "default"
+    Debian: "libapache2-mod-rivet-doc"
+  modrpaf:
+    state: "default"
+    Debian: "libapache2-mod-rpaf"
+  modruwsgi:
+    state: "default"
+    Debian: "libapache2-mod-ruwsgi"
+  modruwsgidbg:
+    state: "default"
+    Debian: "libapache2-mod-ruwsgi-dbg"
+  modscgi:
+    state: "default"
+    Debian: "libapache2-mod-scgi"
+  modshib2:
+    state: "default"
+    Debian: "libapache2-mod-shib2"
+  modspamhaus:
+    state: "default"
+    Debian: "libapache2-mod-spamhaus"
+  modsuphp:
+    state: "default"
+    Debian: "libapache2-mod-suphp"
+  moduploadprogress:
+    state: "default"
+    Debian: "libapache2-mod-upload-progress"
+  moduwsgi:
+    state: "default"
+    Debian: "libapache2-mod-uwsgi"
+  modwsgi:
+    state: "default"
+    RedHat: "mod_wsgi"
+  moduwsgidbg:
+    state: "default"
+    Debian: "libapache2-mod-uwsgi-dbg"
+
+# Enabling the default vhosts is not really a good idea.
+# This currently only works on Ubuntu.
+aspects_apache24_default_vhosts:
+  default:
+    Debian:
+      enable: False
+      file: "default.conf"
+  defaultssl:
+    Debian:
+      enable: False
+      file: "default-ssl.conf"
+  defaulttls:
+    Debian:
+      enable: False
+      file: "default-tls"
+# Ubuntu is consistent where it places the LoadModule lines and .conf files.
+# Thus, you just need to specifiy the names of the appropriate files.
+# CentOS is less consistent. Most LoadModule lines are in httpd.conf.
+# Some are not, thus the need to specify which file to look modify.
+aspects_apache24_mods: {}
+#  modssl:
+#    Debian:
+#      enable: True
+#      links:
+#        conffile: "ssl.conf"
+#        loadfile: "ssl.load"
+#    RedHat:
+#      enable: True
+#      targetfile: "/etc/httpd/conf.d/ssl.conf"
+#      loadmoduleline: "LoadModule rewrite_module modules/mod_rewrite.so"
+#  modrewrite:
+#    Debian:
+#      enable: True
+#      links:
+#        loadfile: "rewrite.load"
+#    RedHat:
+#      enable: True
+#      targetfile: "/etc/httpd/conf/httpd.conf"
+#      loadmoduleline: "LoadModule rewrite_module modules/mod_rewrite.so"
+#  modauthndbm:
+#    Debian:
+#      enable: False
+#      links:
+#        loadfile: "authn_dbm.load"
+#    RedHat:
+#      enable: False
+#      targetfile: "/etc/httpd/conf/httpd.conf"
+#      loadmoduleline: "LoadModule authn_dbm_module modules/mod_authn_dbm.so"
+
+# The configuration set is loaded into the main apache config via an include line.
+# See the distributions default config file to find where that line is.
+# On RedHat, check for what order the conf.d files are loaded if you run into issues.
+aspects_apache24_httpdconf:
+  0startconfig: |
+    # Start Config
+#  1defaultssl: |
+#    # 1defaultssl config from aspects_apache24/defaults/main.yml
+#    # CipherSuite set from https://community.qualys.com/blogs/securitylabs/2013/08/05/configuring-apache-nginx-and-openssl-for-forward-secrecy
+#    <IfModule mod_ssl.c>
+#      SSLProtocol All -SSLv2 -SSLv3
+#      SSLHonorCipherOrder On
+#      SSLCipherSuite EECDH+ECDSA+AESGCM:EECDH+aRSA+AESGCM:EECDH+ECDSA+SHA384:EECDH+ECDSA+SHA256:EECDH+aRSA+SHA384:EECDH+aRSA+SHA256:EECDH+aRSA+RC4:EECDH:EDH+aRSA:RC4:!aNULL:!eNULL:!LOW:!3DES:!MD5:!EXP:!PSK:!SRP:!DSS:+RC4:RC4
+#    </IfModule>
+  9999999999999block: |
+    # End config
+
+# example vhosts shown below, commented out.
+# You should set vhost config in your group_vars or host_vars.
+aspects_apache24_vhosts:
+  0vhosts: |
+    # Start virtual hosts
+#  0default: |
+#    <VirtualHost *:80>
+#        ServerAdmin webmaster@localhost
+#
+#        DocumentRoot /var/www
+#        <Directory />
+#            Options FollowSymLinks
+#            AllowOverride None
+#        </Directory>
+#        <Directory /var/www/>
+#            Options Indexes FollowSymLinks MultiViews
+#            AllowOverride None
+#            Order allow,deny
+#            allow from all
+#        </Directory>
+#
+#        ScriptAlias /cgi-bin/ /usr/lib/cgi-bin/
+#        <Directory "/usr/lib/cgi-bin">
+#            AllowOverride None
+#            Options +ExecCGI -MultiViews +SymLinksIfOwnerMatch
+#            Order allow,deny
+#            Allow from all
+#        </Directory>
+#
+#        ErrorLog ${APACHE_LOG_DIR}/error.log
+#
+#        # Possible values include: debug, info, notice, warn, error, crit,
+#        # alert, emerg.
+#        LogLevel warn
+#
+#        CustomLog ${APACHE_LOG_DIR}/access.log combined
+#
+#        Alias /doc/ "/usr/share/doc/"
+#        <Directory "/usr/share/doc/">
+#            Options Indexes MultiViews FollowSymLinks
+#            AllowOverride None
+#            Order deny,allow
+#            Deny from all
+#            Allow from 127.0.0.0/255.0.0.0 ::1/128
+#        </Directory>
+#
+#    </VirtualHost>
+#  1defaultssl: |
+#    <IfModule mod_ssl.c>
+#    <VirtualHost _default_:443>
+#    	ServerAdmin webmaster@localhost
+#
+#    	DocumentRoot /var/www
+#    	<Directory />
+#    		Options FollowSymLinks
+#    		AllowOverride None
+#    	</Directory>
+#    	<Directory /var/www/>
+#    		Options Indexes FollowSymLinks MultiViews
+#    		AllowOverride None
+#    		Order allow,deny
+#    		allow from all
+#    	</Directory>
+#
+#    	ErrorLog ${APACHE_LOG_DIR}/error.log
+#
+#    	# Possible values include: debug, info, notice, warn, error, crit,
+#    	# alert, emerg.
+#    	LogLevel warn
+#
+#    	CustomLog ${APACHE_LOG_DIR}/ssl_access.log combined
+#
+#    	#   SSL Engine Switch:
+#    	#   Enable/Disable SSL for this virtual host.
+#    	SSLEngine on
+#
+#    	#   A self-signed (snakeoil) certificate can be created by installing
+#    	#   the ssl-cert package. See
+#    	#   /usr/share/doc/apache2.2-common/README.Debian.gz for more info.
+#    	#   If both key and certificate are stored in the same file, only the
+#    	#   SSLCertificateFile directive is needed.
+#    	SSLCertificateFile    /etc/ssl/certs/ssl-cert-snakeoil.pem
+#    	SSLCertificateKeyFile /etc/ssl/private/ssl-cert-snakeoil.key
+#
+#    	#   Server Certificate Chain:
+#    	#   Point SSLCertificateChainFile at a file containing the
+#    	#   concatenation of PEM encoded CA certificates which form the
+#    	#   certificate chain for the server certificate. Alternatively
+#    	#   the referenced file can be the same as SSLCertificateFile
+#    	#   when the CA certificates are directly appended to the server
+#    	#   certificate for convinience.
+#    	#SSLCertificateChainFile /etc/apache2/ssl.crt/server-ca.crt
+#
+#    	#   Certificate Authority (CA):
+#    	#   Set the CA certificate verification path where to find CA
+#    	#   certificates for client authentication or alternatively one
+#    	#   huge file containing all of them (file must be PEM encoded)
+#    	#   Note: Inside SSLCACertificatePath you need hash symlinks
+#    	#         to point to the certificate files. Use the provided
+#    	#         Makefile to update the hash symlinks after changes.
+#    	#SSLCACertificatePath /etc/ssl/certs/
+#    	#SSLCACertificateFile /etc/apache2/ssl.crt/ca-bundle.crt
+#
+#    </VirtualHost>
+#    </IfModule>
+  9999999999999vhost: |
+    # End Virtual Hosts
