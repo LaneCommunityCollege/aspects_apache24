@@ -36,7 +36,7 @@
 - name: RedHat - Set httpd.conf template
   template:
     src="httpd.conf.j2"
-    dest="/etc/httpd/conf.d/9999custom.conf"
+    dest="/etc/httpd/conf.d/zzzzzCustomHttpd.conf"
     mode=644
     owner=0
     group=0
