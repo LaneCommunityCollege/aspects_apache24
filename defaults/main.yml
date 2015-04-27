@@ -2,7 +2,7 @@
 # defaults file for aspects_apache24
 
 # Disable this role by default.
-aspects_apache24_enabled: false
+aspects_apache24_enabled: False
 
 # The only package that should be installed by default is
 # the main apache 2.2 package.
@@ -25,7 +25,7 @@ aspects_apache24_packages:
     state: "default"
     Debian: "apache2-dev"
     RedHat: "httpd-devel"
-  apache2-doc:
+  apache2doc:
     state: "default"
     Debian: "apache2-doc"
     RedHat: "httpd-manual"
