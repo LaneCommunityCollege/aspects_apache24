@@ -5,9 +5,9 @@
 - name: RedHat - Enable modules
   when: item.value.RedHat is defined and item.value.RedHat.enable == True
   lineinfile:
-    state="present"
-    line="{{ item.value.RedHat.loadmoduleline }}"
-    dest="{{ item.value.RedHat.targetfile }}"
+    state: "present"
+    line: "{{ item.value.RedHat.loadmoduleline }}"
+    dest: "{{ item.value.RedHat.targetfile }}"
   with_dict: aspects_apache24_mods
   notify: restart httpd
   tags:
@@ -18,9 +18,9 @@
 - name: RedHat - Disable modules
   when: item.value.RedHat is defined and item.value.RedHat.enable == False
   lineinfile:
-    state="absent"
-    line="{{ item.value.RedHat.loadmoduleline }}"
-    dest="{{ item.value.RedHat.targetfile }}"
+    state: "absent"
+    line: "{{ item.value.RedHat.loadmoduleline }}"
+    dest: "{{ item.value.RedHat.targetfile }}"
   with_dict: aspects_apache24_mods
   notify: restart httpd
   tags:
@@ -35,11 +35,11 @@
 # last, so that it overrides any previous configuration. Need to test this...
 - name: RedHat - Set httpd.conf template
   template:
-    src="httpd.conf.j2"
-    dest="/etc/httpd/conf.d/zzzzzCustomHttpd.conf"
-    mode=644
-    owner=0
-    group=0
+    src: "httpd.conf.j2"
+    dest: "/etc/httpd/conf.d/zzzzzCustomHttpd.conf"
+    mode: 644
+    owner: 0
+    group: 0
   notify: restart httpd
   tags:
   - aspects_apache24
