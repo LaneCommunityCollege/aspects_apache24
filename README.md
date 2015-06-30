@@ -3,8 +3,6 @@ Part of the Aspects Suite.
 
 Allows you to configure Apache 2.4 server and virtual hosts.
 
-Currently, the biggest difference between this role and aspects_apache22, is that the ```aspects_apache24_packages``` dictionary has been adjusted to match the packages in Ubuntu 14.04.
-
 ##Requirements
 
 Set ```hash_behaviour=merge``` in your ansible.cfg file.
