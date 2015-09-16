@@ -40,7 +40,7 @@
     item.value.Debian.links.conffile is defined
   file:
     state: "absent"
-    path: "/etc/apache2/sites-enabled/{{ item.value.Debian.links.conffile }}"
+    path: "/etc/apache2/mods-enabled/{{ item.value.Debian.links.conffile }}"
   with_dict: aspects_apache24_mods
   notify: restart apache2
   tags:
@@ -54,7 +54,7 @@
     item.value.Debian.links.loadfile is defined
   file:
     state: "absent"
-    path: "/etc/apache2/sites-enabled/{{ item.value.Debian.links.loadfile }}"
+    path: "/etc/apache2/mods-enabled/{{ item.value.Debian.links.loadfile }}"
   with_dict: aspects_apache24_mods
   notify: restart apache2
   tags:
