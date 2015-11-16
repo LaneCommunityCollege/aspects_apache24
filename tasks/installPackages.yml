@@ -1,7 +1,7 @@
 ---
 # Install Apache Packages.
 - name: Debian - Install python-apt for use with ansible apt modules.
-  when: ansible_os_family == "Debian"
+  when: ansible_os_family == "Debian" or ansible_os_family == "Linuxmint"
   apt:
     pkg: python-apt
     state: latest
@@ -13,7 +13,7 @@
 
 - name: Debian - Install apache24 packages with apt
   when:
-    ansible_os_family == "Debian" and
+    (ansible_os_family == "Debian" or ansible_os_family == "Linuxmint") and
     item.value.state != 'default' and
     item.value.state != 'purged' and
     item.value.Debian is defined

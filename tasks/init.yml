@@ -7,8 +7,9 @@
 
 - include: DebianMain.yml
   when:
-    ansible_distribution == "Ubuntu" and
-    ansible_lsb.release == "14.04"
+    (ansible_distribution == "Ubuntu" and
+    ansible_lsb.release == "14.04") or
+    ansible_distribution == "Linuxmint"
   tags:
   - aspects_apache24
 #
