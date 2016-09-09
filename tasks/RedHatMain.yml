@@ -8,7 +8,7 @@
     state: "present"
     line: "{{ item.value.RedHat.loadmoduleline }}"
     dest: "{{ item.value.RedHat.targetfile }}"
-  with_dict: aspects_apache24_mods
+  with_dict: "{{ aspects_apache24_mods }}"
   notify: restart httpd
   tags:
   - aspects_apache24
@@ -21,7 +21,7 @@
     state: "absent"
     line: "{{ item.value.RedHat.loadmoduleline }}"
     dest: "{{ item.value.RedHat.targetfile }}"
-  with_dict: aspects_apache24_mods
+  with_dict: "{{ aspects_apache24_mods }}"
   notify: restart httpd
   tags:
   - aspects_apache24

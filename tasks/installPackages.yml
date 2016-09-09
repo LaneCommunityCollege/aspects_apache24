@@ -22,7 +22,7 @@
     state: "{{ item.value.state }}"
     update_cache: "yes"
     cache_valid_time: "86400"
-  with_dict: aspects_apache24_packages
+  with_dict: "{{ aspects_apache24_packages }}"
   tags:
     - aspects_apache24
     - aspects_apache24_package_install
@@ -36,7 +36,7 @@
   yum:
     name: "{{ item.value.RedHat }}"
     state: "{{ item.value.state }}"
-  with_dict: aspects_apache24_packages
+  with_dict: "{{ aspects_apache24_packages }}"
   tags:
     - aspects_apache24
     - aspects_apache24_package_install
@@ -50,7 +50,7 @@
   zypper:
     name: "{{ item.value.Suse }}"
     state: "{{ item.value.state }}"
-  with_dict: aspects_apache24_packages
+  with_dict: "{{ aspects_apache24_packages }}"
   tags:
     - aspects_apache24
     - aspects_apache24_package_install

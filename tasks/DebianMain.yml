@@ -11,7 +11,7 @@
     state: "link"
     path: "/etc/apache2/mods-enabled/{{ item.value.Debian.links.conffile }}"
     src: "/etc/apache2/mods-available/{{ item.value.Debian.links.conffile }}"
-  with_dict: aspects_apache24_mods
+  with_dict: "{{ aspects_apache24_mods }}"
   notify: restart apache2
   tags:
   - aspects_apache24
@@ -26,7 +26,7 @@
     state: "link"
     path: "/etc/apache2/mods-enabled/{{ item.value.Debian.links.loadfile }}"
     src: "/etc/apache2/mods-available/{{ item.value.Debian.links.loadfile }}"
-  with_dict: aspects_apache24_mods
+  with_dict: "{{ aspects_apache24_mods }}"
   notify: restart apache2
   tags:
   - aspects_apache24
@@ -41,7 +41,7 @@
   file:
     state: "absent"
     path: "/etc/apache2/mods-enabled/{{ item.value.Debian.links.conffile }}"
-  with_dict: aspects_apache24_mods
+  with_dict: "{{ aspects_apache24_mods }}"
   notify: restart apache2
   tags:
   - aspects_apache24
@@ -55,7 +55,7 @@
   file:
     state: "absent"
     path: "/etc/apache2/mods-enabled/{{ item.value.Debian.links.loadfile }}"
-  with_dict: aspects_apache24_mods
+  with_dict: "{{ aspects_apache24_mods }}"
   notify: restart apache2
   tags:
   - aspects_apache24
@@ -69,7 +69,7 @@
   file:
     state: "absent"
     path: "/etc/apache2/sites-enabled/{{ item.value.Debian.file }}"
-  with_dict: aspects_apache24_default_vhosts
+  with_dict: "{{ aspects_apache24_default_vhosts }}"
   notify: restart apache2
   tags:
   - aspects_apache24
