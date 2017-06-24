@@ -14,7 +14,7 @@ See the files in defaults for examples of most variables. If any are not self ex
 * ```aspects_apache24_packages```: The various Apache 2.4 packages you can install.
 * ```aspects_apache24_default_vhosts```: Dictionary of default virtual host configurations. Used to disable or enable the default vhosts on Ubuntu.
 * ```aspects_apache24_mods```: Dictionary of modules that you wish to enable or disable. Remember to ensure the correct package is installed before you try to use them.
-* ```aspects_apache24_httpdconf```: Blocks of apache configuration. Use this to modify the defaults set by the distribution. These are sorted by key. Override blocks by setting the key value to "".
+* ```aspects_apache24_httpdconf```: Blocks of apache configuration. Use this to modify the defaults set by the distribution. These are sorted by key. Override blocks by setting the key value to ```""```.
 * ```aspects_apache24_vhosts```: Blocks of apache vhost configuration. Use this to add new vhosts. These are sorted by key. Override blocks by setting the key value to ```""```.
 
 ## Example Playbook
@@ -68,9 +68,11 @@ On Debian/Ubuntu, that file is placed at: ```/etc/apache2/conf-enabled/zzzzzCust
 * Find the correct module in ```aspects_apache24_packages```
 * Set ```state``` to ```latest``` or ```present```.
 
+```yaml
     aspects_apache24_packages:
       modulekey:
         state: "latest"
+```
 
 If the module is not in ```aspects_apache24_packages``` already, or doesn't have a package name for your OS, just do something like:
 
