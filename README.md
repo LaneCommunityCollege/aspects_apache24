@@ -1,13 +1,13 @@
-#aspects_apache24
+# aspects_apache24
 Part of the Aspects Suite.
 
 Allows you to configure Apache 2.4 server and virtual hosts.
 
-##Requirements
+## Requirements
 
 Set ```hash_behaviour=merge``` in your ansible.cfg file.
 
-##Role Variables
+## Role Variables
 See the files in defaults for examples of most variables. If any are not self explanatory, see the Apache 2.4 docs. Each individual configuration option is named the same, or similar, to the Apache directive it controls.
 
 * ```aspects_apache24_enabled```: Flag to enable or disable this role. Default is disabled.
@@ -15,9 +15,9 @@ See the files in defaults for examples of most variables. If any are not self ex
 * ```aspects_apache24_default_vhosts```: Dictionary of default virtual host configurations. Used to disable or enable the default vhosts on Ubuntu.
 * ```aspects_apache24_mods```: Dictionary of modules that you wish to enable or disable. Remember to ensure the correct package is installed before you try to use them.
 * ```aspects_apache24_httpdconf```: Blocks of apache configuration. Use this to modify the defaults set by the distribution. These are sorted by key. Override blocks by setting the key value to "".
-* ```aspects_apache24_vhosts```: Blocks of apache vhost configuration. Use this to add new vhosts. These are sorted by key. Override blocks by setting the key value to "".
+* ```aspects_apache24_vhosts```: Blocks of apache vhost configuration. Use this to add new vhosts. These are sorted by key. Override blocks by setting the key value to ```""```.
 
-##Example Playbook
+## Example Playbook
 
     - hosts:
       - foo.bar.com
@@ -66,17 +66,17 @@ See the files in defaults for examples of most variables. If any are not self ex
     aspects_apache24_packages:
       modulekey:
         state: "latest"
-        
+
 If the module is not in ```aspects_apache24_packages``` already, or doesn't have a package name for your OS, just do something like:
 
     aspects_apache24_packages:
       modulekey:
         state: "latest"
         OS: "package name"
-        
+
 ## Overriding values
 If you have a ```aspects_apache24_httpdconf``` section set in a group_vars file but you want to get rid of it, or modify it on an individual server, just find the key, and set in your host_vars file. That's why we use ```hash_behaviour=merge```.
 
-##License
+## License
 
 MIT
