@@ -18,7 +18,7 @@ See the files in defaults for examples of most variables. If any are not self ex
 * ```aspects_apache24_vhosts```: Blocks of apache vhost configuration. Use this to add new vhosts. These are sorted by key. Override blocks by setting the key value to ```""```.
 
 ## Example Playbook
-
+```yaml
     - hosts:
       - foo.bar.com
       roles:
@@ -58,7 +58,7 @@ See the files in defaults for examples of most variables. If any are not self ex
               AuthMySQLEnable On
               require valid-user
             </VirtualHost>
-
+```
 ## How it works
 Default configuration is modified so that all the custom configuration in the ```zzzzzCustomHttpd.conf``` file will override whatever it needs to override.
 
