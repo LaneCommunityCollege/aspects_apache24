@@ -59,6 +59,11 @@ See the files in defaults for examples of most variables. If any are not self ex
               require valid-user
             </VirtualHost>
 
+## How it works
+Default configuration is modified so that all the custom configuration in the ```zzzzzCustomHttpd.conf``` file will override whatever it needs to override.
+
+On Debian/Ubuntu, that file is placed at: ```/etc/apache2/conf-enabled/zzzzzCustomHttpd.conf```
+
 ## Installing Modules
 * Find the correct module in ```aspects_apache24_packages```
 * Set ```state``` to ```latest``` or ```present```.
