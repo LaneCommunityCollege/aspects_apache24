@@ -74,10 +74,12 @@ On Debian/Ubuntu, that file is placed at: ```/etc/apache2/conf-enabled/zzzzzCust
 
 If the module is not in ```aspects_apache24_packages``` already, or doesn't have a package name for your OS, just do something like:
 
+```yaml
     aspects_apache24_packages:
       modulekey:
         state: "latest"
         OS: "package name"
+```
 
 ## Overriding values
 If you have a ```aspects_apache24_httpdconf``` section set in a group_vars file but you want to get rid of it, or modify it on an individual server, just find the key, and set in your host_vars file. That's why we use ```hash_behaviour=merge```.
