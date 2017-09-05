@@ -3,6 +3,8 @@
 
 # Disable this role by default.
 aspects_apache24_enabled: False
+aspects_apache24_selinux_change: False
+aspects_apache24_selinux_httpd_can_network_connect: True
 
 # The only package that should be installed by default is
 # the main apache 2.2 package.

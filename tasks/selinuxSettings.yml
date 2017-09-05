@@ -1,0 +1,34 @@
+---
+
+- name: RedHat - Install packages so that Ansible can manage SELinux with yum
+  yum:
+    name: "{{ item }}"
+    state: "present"
+  with_items:
+    - "policycoreutils-python"
+    - "libselinux-python"
+  tags:
+    - aspects_apache24
+    - aspects_apache24_package_install
+
+# Allow Apache to listen on tcp port ports listed in aspects_apache24_listen_ports
+- name: RedHat - Open ports for httpd in SELinux settings.
+  seport:
+    state: present
+    ports: "{{ item }}"
+    proto: tcp
+    setype: http_port_t
+  with_items: "{{ aspects_apache24_listen_ports|default({}) }}"
+  tags:
+  - aspects_apache24
+  - aspects_apache24_httpdconf
+
+- name: RedHat - Allow httpd_can_network_connect in SELinux settings.
+  when: aspects_apache24_selinux_httpd_can_network_connect
+  seboolean:
+    name: httpd_can_network_connect
+    state: yes
+    persistent: yes
+  tags:
+  - aspects_apache24
+  - aspects_apache24_httpdconf

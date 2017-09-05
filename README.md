@@ -11,11 +11,14 @@ Set ```hash_behaviour=merge``` in your ansible.cfg file.
 See the files in defaults for examples of most variables. If any are not self explanatory, see the Apache 2.4 docs. Each individual configuration option is named the same, or similar, to the Apache directive it controls.
 
 * ```aspects_apache24_enabled```: Flag to enable or disable this role. Default is disabled.
+* ```aspects_apache24_selinux_change```: Flag to enable or disable changing selinux port options. Default is False.
+* ```aspects_apache24_selinux_httpd_can_network_connect```: When ```aspects_apache24_selinux_change``` modify the ```httpd_can_network_connect``` SELinux boolean value. Set to true when True, set to false, when False. Default is True.
 * ```aspects_apache24_packages```: The various Apache 2.4 packages you can install.
 * ```aspects_apache24_default_vhosts```: Dictionary of default virtual host configurations. Used to disable or enable the default vhosts on Ubuntu.
 * ```aspects_apache24_mods```: Dictionary of modules that you wish to enable or disable. Remember to ensure the correct package is installed before you try to use them.
 * ```aspects_apache24_httpdconf```: Blocks of apache configuration. Use this to modify the defaults set by the distribution. These are sorted by key. Override blocks by setting the key value to ```""```.
 * ```aspects_apache24_vhosts```: Blocks of apache vhost configuration. Use this to add new vhosts. These are sorted by key. Override blocks by setting the key value to ```""```.
+* ```aspects_apache24_listen_ports```: A list of ports that selinux should allow apache to listen on.
 
 ## Example Playbook
 ```yaml
@@ -58,6 +61,20 @@ See the files in defaults for examples of most variables. If any are not self ex
               AuthMySQLEnable On
               require valid-user
             </VirtualHost>
+          duplicatiproxy: |
+            Listen 8201
+            <VirtualHost *:8201>
+              ServerAdmin webservices@lanecc.edu
+              ServerName {{ ansible_fqdn }}
+              #Duplicati Redirect
+              AllowEncodedSlashes On
+              ProxyPass "/" "http://localhost:8200/"
+              ProxyPassReverse "/" "http://localhost:8200/"
+            </VirtualHost>
+        aspects_apache24_selinux_change: True
+        aspects_apache24_selinux_httpd_can_network_connect: False
+        aspects_apache24_listen_ports:
+          - 8201
 ```
 ## How it works
 Default configuration is modified so that all the custom configuration in the ```zzzzzCustomHttpd.conf``` file will override whatever it needs to override.
