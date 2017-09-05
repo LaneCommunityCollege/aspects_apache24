@@ -40,7 +40,7 @@
     mode: 644
     owner: 0
     group: 0
-  notify: restart httpd
+  notify: reload httpd
   tags:
   - aspects_apache24
   - aspects_apache24_httpdconf
