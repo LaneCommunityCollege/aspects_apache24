@@ -282,6 +282,10 @@ aspects_apache24_packages:
     state: "default"
     Debian: "libapache2-mod-uwsgi-dbg"
 
+# Enable or disable other_vhosts log file.
+# True by default.
+aspects_apache24_other_vhosts_log_enable: True
+
 # Enabling the default vhosts is not really a good idea.
 # This currently only works on Ubuntu.
 aspects_apache24_default_vhosts:

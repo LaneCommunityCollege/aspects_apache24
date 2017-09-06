@@ -18,6 +18,7 @@ See the files in defaults for examples of most variables. If any are not self ex
 * ```aspects_apache24_mods```: Dictionary of modules that you wish to enable or disable. Remember to ensure the correct package is installed before you try to use them.
 * ```aspects_apache24_httpdconf```: Blocks of apache configuration. Use this to modify the defaults set by the distribution. These are sorted by key. Override blocks by setting the key value to ```""```.
 * ```aspects_apache24_vhosts```: Blocks of apache vhost configuration. Use this to add new vhosts. These are sorted by key. Override blocks by setting the key value to ```""```.
+* ```aspects_apache24_other_vhosts_log_enable```: On Debian family systems, enable or disable the other_vhosts.log file. Default is True for enabled. Set to False for disabled. Needs a manual apacher restart to apply changes.
 * ```aspects_apache24_listen_ports```: A list of ports that selinux should allow apache to listen on.
 
 ## Example Playbook
