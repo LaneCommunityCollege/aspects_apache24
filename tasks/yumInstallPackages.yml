@@ -1,0 +1,30 @@
+---
+- name: yum - Enable EPEL repository
+  yum:
+    name: "epel-release"
+    state: "present"
+  tags:
+    - aspects_apache24
+    - aspects_apache24_package_install
+    - aspects_apache24_package_install_yum
+
+- name: yum - Install packages on CentOS 7
+  when:
+    (
+      item.value.CentOS is defined and
+      item.value.CentOS.7 is defined and
+      ansible_distribution == "CentOS" and
+      ansible_distribution_major_version == "7" and
+      (
+        item.value.state == "present" or
+        item.value.state == "latest"
+      )
+    )
+  yum:
+    name: "{{ item.value.CentOS.7 }}"
+    state: "{{ item.value.state }}"
+  with_dict: "{{ aspects_apache24_packages }}"
+  tags:
+    - aspects_apache24
+    - aspects_apache24_package_install
+    - aspects_apache24_package_install_yum

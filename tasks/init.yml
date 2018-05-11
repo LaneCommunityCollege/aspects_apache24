@@ -12,37 +12,37 @@
   tags:
     - aspects_apache24
     - aspects_apache24_package_remove
+
+- include: DebianMain.yml
+  when:
+    (
+      (
+        ansible_distribution == "Ubuntu" and
+        ansible_lsb.release == "14.04"
+      ) or
+      (
+        ansible_distribution == "Ubuntu" and
+        ansible_distribution_version == "16.04"
+      ) or (
+        ansible_distribution == "Debian" and
+        ansible_distribution_release == "jessie"
+      )
+    ) or
+    ansible_distribution == "Linuxmint"
+  tags:
+  - aspects_apache24
 #
-#- include: DebianMain.yml
-#  when:
-#    (
-#      (
-#        ansible_distribution == "Ubuntu" and
-#        ansible_lsb.release == "14.04"
-#      ) or
-#      (
-#        ansible_distribution == "Ubuntu" and
-#        ansible_distribution_version == "16.04"
-#      ) or (
-#        ansible_distribution == "Debian" and
-#        ansible_distribution_release == "jessie"
-#      )
-#    ) or
-#    ansible_distribution == "Linuxmint"
-#  tags:
-#  - aspects_apache24
-##
-#- include: RedHatMain.yml
-#  when:
-#    (ansible_os_family == "RedHat" and ansible_distribution_major_version == "7")
-#  tags:
-#  - aspects_apache24
-#
-#- name: Include selinuxSettings tasks
-#  when: (ansible_selinux is defined and ansible_selinux != False) and
-#    ansible_selinux.status == "enabled" and
-#    aspects_apache24_selinux_change != False
-#  include: selinuxSettings.yml
-#  tags:
-#  - aspects_apache24
-#  - aspects_apache24_httpdconf
+- include: RedHatMain.yml
+  when:
+    (ansible_os_family == "RedHat" and ansible_distribution_major_version == "7")
+  tags:
+  - aspects_apache24
+
+- name: Include selinuxSettings tasks
+  when: (ansible_selinux is defined and ansible_selinux != False) and
+    ansible_selinux.status == "enabled" and
+    aspects_apache24_selinux_change != False
+  include: selinuxSettings.yml
+  tags:
+  - aspects_apache24
+  - aspects_apache24_httpdconf
