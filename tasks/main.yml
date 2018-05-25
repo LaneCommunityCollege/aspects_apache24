@@ -1,6 +1,14 @@
 ---
 # only init when aspects_apache24_enabled == true.
-- include: init.yml
+- import_tasks: "init.yml"
   when: aspects_apache24_enabled
+        and not aspects_apache24_httpdconf is defined
+  tags:
+  - aspects_apache24
+
+- name: "Old Configuration Detected."
+  when: aspects_apache24_httpdconf is defined
+  debug:
+    msg: "aspects_apache24_httpdconf is defined. All tasks have been skipped. Please update your configuration to use the new format."
   tags:
   - aspects_apache24

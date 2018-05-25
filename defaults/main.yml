@@ -17,180 +17,265 @@ aspects_apache24_packages:
     CentOS:
       7: "httpd"
 
-# Enable or disable other_vhosts log file.
-# True by default.
-aspects_apache24_other_vhosts_log_enable: True
+aspects_apache24_test_configuration_root: "/opt/aspects_apache24_test_configuration"
+aspects_apache24_test_configuration_directories_list:
+  - "{{ aspects_apache24_test_configuration_root }}"
+  - "{{ aspects_apache24_test_configuration_root }}/aspects.mods.d"
+  - "{{ aspects_apache24_test_configuration_root }}/aspects.conf.d"
+  - "{{ aspects_apache24_test_configuration_root }}/aspects.vhosts.d"
 
-# Enabling the default vhosts is not really a good idea.
-# This currently only works on Ubuntu.
-aspects_apache24_default_vhosts:
+aspects_apache24_configuration_root: "{% if ansible_os_family == 'RedHat' %}/etc/httpd{% elif ansible_os_family == 'Debian' %}/etc/apache2{% endif %}"
+aspects_apache24_configuration_directories_list:
+  - "{{ aspects_apache24_configuration_root }}/aspects.mods.d"
+  - "{{ aspects_apache24_configuration_root }}/aspects.conf.d"
+  - "{{ aspects_apache24_configuration_root }}/aspects.vhosts.d"
+
+aspects_apache24_modules_root: "{% if ansible_os_family == 'RedHat' %}/usr/lib64/httpd/modules{% elif ansible_os_family == 'Debian' %}/usr/lib/apache2/modules{% endif %}"
+
+aspects_apache24_logs_root: "{% if ansible_os_family == 'RedHat' %}/var/log/httpd{% elif ansible_os_family == 'Debian' %}/var/log/apache2{% endif %}"
+
+
+aspects_apache24_base_modules: |
+  {% if ansible_distribution == 'CentOS' and ansible_distribution_major_version == '7' %}
+  LoadModule unixd_module modules/mod_unixd.so
+  LoadModule log_config_module modules/mod_log_config.so
+  LoadModule logio_module modules/mod_logio.so
+  {% endif %}
+  LoadModule authz_core_module modules/mod_authz_core.so
+
+aspects_apache24_configuration_general:
+  keepalive:
+    enabled: "True"
+    weight: "00"
+    name: "keepalive"
+    block: |
+      #ggg
+      # Timeout: The number of seconds before receives and sends time out.
+      #
+      Timeout 300
+      #
+      # KeepAlive: Whether or not to allow persistent connections (more than
+      # one request per connection). Set to "Off" to deactivate.
+      #
+      KeepAlive On
+      #
+      # MaxKeepAliveRequests: The maximum number of requests to allow
+      # during a persistent connection. Set to 0 to allow an unlimited amount.
+      # We recommend you leave this number high, for maximum performance.
+      #
+      MaxKeepAliveRequests 1000
+      #
+      # KeepAliveTimeout: Number of seconds to wait for the next request from the
+      # same client on the same connection.
+      #
+      KeepAliveTimeout 5
+  hostnamelookups:
+    enabled: True
+    name: hostnamelookups
+    weight: "01"
+    block: |
+      HostnameLookups Off
+  errorlogging:
+    enabled: True
+    name: errorlogging
+    weight: "02"
+    block: |
+      ErrorLog "{% if ansible_os_family == 'RedHat' %}logs/error_log{% elif ansible_os_family == 'Debian' %}logs/error.log{% endif %}"
+  loglevel:
+    enabled: True
+    name: loglevel
+    weight: "02"
+    block: |
+      LogLevel warn
+  httpport:
+    enabled: True
+    name: httpport
+    weight: "03"
+    block: |
+      Listen 80
+  directorydefaults:
+    enabled: True
+    name: directorydefaults
+    weight: "04"
+    block: |
+      # Sets the default security model of the Apache2 HTTPD server. It does
+      # not allow access to the root filesystem outside of /usr/share and /var/www.
+      # The former is used by web applications packaged in Debian,
+      # the latter may be used for local directories served by the web server. If
+      # your system is serving content from a sub-directory in /srv you must allow
+      # access here, or in any related virtual host.
+      <Directory />
+          Options FollowSymLinks
+          AllowOverride None
+          Require all denied
+      </Directory>
+      <Directory /usr/share>
+          AllowOverride None
+          Require all granted
+      </Directory>
+      <Directory /var/www/>
+          Options Indexes FollowSymLinks
+          AllowOverride None
+          Require all granted
+      </Directory>
+      #<Directory /srv/>
+      #	Options Indexes FollowSymLinks
+      #	AllowOverride None
+      #	Require all granted
+      #</Directory>
+      #
+      # DirectoryIndex: sets the file that Apache will serve if a directory
+      # is requested.
+      #
+      <IfModule dir_module>
+          DirectoryIndex index.html
+      </IfModule>
+  htfiles:
+    enabled: True
+    name: htfiles
+    weight: "04"
+    block: |
+      # AccessFileName: The name of the file to look for in each directory
+      # for additional configuration directives.  See also the AllowOverride
+      # directive.
+      #
+      AccessFileName .htaccess
+      #
+      # The following lines prevent .htaccess and .htpasswd files from being
+      # viewed by Web clients.
+      #
+      <FilesMatch "^\.ht">
+          Require all denied
+      </FilesMatch>
+  generallogformats:
+    enabled: True
+    name: logformats
+    weight: "05"
+    block: |
+      #
+      # The following directives define some format nicknames for use with
+      # a CustomLog directive.
+      #
+      # These deviate from the Common Log Format definitions in that they use %O
+      # (the actual bytes sent including headers) instead of %b (the size of the
+      # requested file), because the latter makes it impossible to detect partial
+      # requests.
+      #
+      # Note that the use of %{X-Forwarded-For}i instead of %h is not recommended.
+      # Use mod_remoteip instead.
+      #
+      LogFormat "%v:%p %h %l %u %t \"%r\" %>s %O \"%{Referer}i\" \"%{User-Agent}i\"" vhost_combined
+      LogFormat "%h %l %u %t \"%r\" %>s %O \"%{Referer}i\" \"%{User-Agent}i\"" combined
+      LogFormat "%h %l %u %t \"%r\" %>s %O" common
+      LogFormat "%{Referer}i -> %U" referer
+      LogFormat "%{User-agent}i" agent
+  defaultaccesslog:
+    enabled: True
+    name: accesslog
+    weight: "06"
+    block: |
+      {% if ansible_os_family == 'RedHat' %}
+      CustomLog "logs/access_log" combined
+      {% elif ansible_os_family == 'Debian' %}
+      CustomLog "logs/access.log" combined
+      {% endif %}"
+  defaultcharset:
+    enabled: True
+    name: defaultcharset
+    weight: "06"
+    block: |
+      #
+      # Specify a default charset for all content served; this enables
+      # interpretation of all content as UTF-8 by default.  To use the
+      # default browser choice (ISO-8859-1), or to allow the META tags
+      # in HTML content to override this choice, comment out this
+      # directive:
+      #
+      AddDefaultCharset UTF-8
+  sendfile:
+    enabled: True
+    name: sendfile
+    weight: "06"
+    block: |
+      #
+      # EnableMMAP and EnableSendfile: On systems that support it,
+      # memory-mapping or the sendfile syscall may be used to deliver
+      # files.  This usually improves server performance, but must
+      # be turned off when serving from networked-mounted
+      # filesystems or if support for these functions is otherwise
+      # broken on your system.
+      # Defaults if commented: EnableMMAP On, EnableSendfile Off
+      #
+      #EnableMMAP off
+      EnableSendfile on
+
+aspects_apache24_configuration_modules:
+  systemd:
+    enabled: "{% if ansible_distribution == 'CentOS' and ansible_distribution_major_version == '7' %}True{% else %}False{% endif %}"
+    name: systemd
+    weight: "00"
+    block: |
+      # Required on CentOS 7 to make the systemd.service Type=notify option work.
+      LoadModule systemd_module modules/mod_systemd.so
+  mpm_prefork:
+    enabled: True
+    name: mpm_prefork
+    weight: "00"
+    block: |
+      LoadModule mpm_prefork_module modules/mod_mpm_prefork.so
+      <IfModule mpm_prefork_module>
+      	StartServers			 5
+      	MinSpareServers		  5
+      	MaxSpareServers		 10
+      	MaxRequestWorkers	  150
+      	MaxConnectionsPerChild   0
+      </IfModule>
+  mimemagic:
+    enabled: True
+    name: mimemagic
+    weight: "00"
+    block: |
+      LoadModule mime_magic_module modules/mod_mime_magic.so
+      <IfModule mime_magic_module>
+          #
+          # The mod_mime_magic module allows the server to use various hints from the
+          # contents of the file itself to determine its type.  The MIMEMagicFile
+          # directive tells the module where the hint definitions are located.
+          #
+          {% if ansible_os_family == 'RedHat' %}
+          MIMEMagicFile {{ aspects_apache24_configuration_root}}/conf/magic
+          {% elif ansible_os_family == 'Debian' %}
+          MIMEMagicFile {{ aspects_apache24_configuration_root }}/magic
+          {% endif %}"
+      </IfModule>
+  dir_module:
+    enabled: True
+    name: dir_module
+    weight: "01"
+    block: |
+      LoadModule dir_module modules/mod_dir.so
+      #
+      # DirectoryIndex: sets the file that Apache will serve if a directory
+      # is requested.
+      #
+      <IfModule dir_module>
+          DirectoryIndex index.html
+      </IfModule>
+
+aspects_apache24_configuration_vhosts:
   default:
-    Debian:
-      enable: False
-      file: "000-default.conf"
-  defaultssl:
-    Debian:
-      enable: False
-      file: "default-ssl.conf"
-  defaulttls:
-    Debian:
-      enable: False
-      file: "default-tls"
-# Ubuntu is consistent where it places the LoadModule lines and .conf files.
-# Thus, you just need to specifiy the names of the appropriate files.
-# CentOS is less consistent. Most LoadModule lines are in httpd.conf.
-# Some are not, thus the need to specify which file to look modify.
-aspects_apache24_mods: {}
-#  modssl:
-#    Debian:
-#      enable: True
-#      links:
-#        conffile: "ssl.conf"
-#        loadfile: "ssl.load"
-#    RedHat:
-#      enable: True
-#      targetfile: "/etc/httpd/conf.d/ssl.conf"
-#      loadmoduleline: "LoadModule rewrite_module modules/mod_rewrite.so"
-#  modrewrite:
-#    Debian:
-#      enable: True
-#      links:
-#        loadfile: "rewrite.load"
-#    RedHat:
-#      enable: True
-#      targetfile: "/etc/httpd/conf/httpd.conf"
-#      loadmoduleline: "LoadModule rewrite_module modules/mod_rewrite.so"
-#  modauthndbm:
-#    Debian:
-#      enable: False
-#      links:
-#        loadfile: "authn_dbm.load"
-#    RedHat:
-#      enable: False
-#      targetfile: "/etc/httpd/conf/httpd.conf"
-#      loadmoduleline: "LoadModule authn_dbm_module modules/mod_authn_dbm.so"
-
-# The configuration set is loaded into the main apache config via an include line.
-# See the distributions default config file to find where that line is.
-# On RedHat, check for what order the conf.d files are loaded if you run into issues.
-aspects_apache24_httpdconf:
-  0startconfig: |
-    # Start Config
-#  1defaultssl: |
-#    # 1defaultssl config from aspects_apache24/defaults/main.yml
-#    # CipherSuite set from https://community.qualys.com/blogs/securitylabs/2013/08/05/configuring-apache-nginx-and-openssl-for-forward-secrecy
-#    <IfModule mod_ssl.c>
-#      SSLProtocol All -SSLv2 -SSLv3
-#      SSLHonorCipherOrder On
-#      SSLCipherSuite EECDH+ECDSA+AESGCM:EECDH+aRSA+AESGCM:EECDH+ECDSA+SHA384:EECDH+ECDSA+SHA256:EECDH+aRSA+SHA384:EECDH+aRSA+SHA256:EECDH+aRSA+RC4:EECDH:EDH+aRSA:RC4:!aNULL:!eNULL:!LOW:!3DES:!MD5:!EXP:!PSK:!SRP:!DSS:+RC4:RC4
-#    </IfModule>
-  ZZZZZblock: |
-    # End config
-
-# example vhosts shown below, commented out.
-# You should set vhost config in your group_vars or host_vars.
-aspects_apache24_vhosts:
-  0vhosts: |
-    # Start virtual hosts
-#  0default: |
-#    <VirtualHost *:80>
-#        ServerAdmin webmaster@localhost
-#
-#        DocumentRoot /var/www
-#        <Directory />
-#            Options FollowSymLinks
-#            AllowOverride None
-#        </Directory>
-#        <Directory /var/www/>
-#            Options Indexes FollowSymLinks MultiViews
-#            AllowOverride None
-#            Order allow,deny
-#            allow from all
-#        </Directory>
-#
-#        ScriptAlias /cgi-bin/ /usr/lib/cgi-bin/
-#        <Directory "/usr/lib/cgi-bin">
-#            AllowOverride None
-#            Options +ExecCGI -MultiViews +SymLinksIfOwnerMatch
-#            Order allow,deny
-#            Allow from all
-#        </Directory>
-#
-#        ErrorLog ${APACHE_LOG_DIR}/error.log
-#
-#        # Possible values include: debug, info, notice, warn, error, crit,
-#        # alert, emerg.
-#        LogLevel warn
-#
-#        CustomLog ${APACHE_LOG_DIR}/access.log combined
-#
-#        Alias /doc/ "/usr/share/doc/"
-#        <Directory "/usr/share/doc/">
-#            Options Indexes MultiViews FollowSymLinks
-#            AllowOverride None
-#            Order deny,allow
-#            Deny from all
-#            Allow from 127.0.0.0/255.0.0.0 ::1/128
-#        </Directory>
-#
-#    </VirtualHost>
-#  1defaultssl: |
-#    <IfModule mod_ssl.c>
-#    <VirtualHost _default_:443>
-#    	ServerAdmin webmaster@localhost
-#
-#    	DocumentRoot /var/www
-#    	<Directory />
-#    		Options FollowSymLinks
-#    		AllowOverride None
-#    	</Directory>
-#    	<Directory /var/www/>
-#    		Options Indexes FollowSymLinks MultiViews
-#    		AllowOverride None
-#    		Order allow,deny
-#    		allow from all
-#    	</Directory>
-#
-#    	ErrorLog ${APACHE_LOG_DIR}/error.log
-#
-#    	# Possible values include: debug, info, notice, warn, error, crit,
-#    	# alert, emerg.
-#    	LogLevel warn
-#
-#    	CustomLog ${APACHE_LOG_DIR}/ssl_access.log combined
-#
-#    	#   SSL Engine Switch:
-#    	#   Enable/Disable SSL for this virtual host.
-#    	SSLEngine on
-#
-#    	#   A self-signed (snakeoil) certificate can be created by installing
-#    	#   the ssl-cert package. See
-#    	#   /usr/share/doc/apache2.2-common/README.Debian.gz for more info.
-#    	#   If both key and certificate are stored in the same file, only the
-#    	#   SSLCertificateFile directive is needed.
-#    	SSLCertificateFile    /etc/ssl/certs/ssl-cert-snakeoil.pem
-#    	SSLCertificateKeyFile /etc/ssl/private/ssl-cert-snakeoil.key
-#
-#    	#   Server Certificate Chain:
-#    	#   Point SSLCertificateChainFile at a file containing the
-#    	#   concatenation of PEM encoded CA certificates which form the
-#    	#   certificate chain for the server certificate. Alternatively
-#    	#   the referenced file can be the same as SSLCertificateFile
-#    	#   when the CA certificates are directly appended to the server
-#    	#   certificate for convinience.
-#    	#SSLCertificateChainFile /etc/apache2/ssl.crt/server-ca.crt
-#
-#    	#   Certificate Authority (CA):
-#    	#   Set the CA certificate verification path where to find CA
-#    	#   certificates for client authentication or alternatively one
-#    	#   huge file containing all of them (file must be PEM encoded)
-#    	#   Note: Inside SSLCACertificatePath you need hash symlinks
-#    	#         to point to the certificate files. Use the provided
-#    	#         Makefile to update the hash symlinks after changes.
-#    	#SSLCACertificatePath /etc/ssl/certs/
-#    	#SSLCACertificateFile /etc/apache2/ssl.crt/ca-bundle.crt
-#
-#    </VirtualHost>
-#    </IfModule>
-  ZZZZZZZvhost: |
-    # End Virtual Hosts
+    enabled: False
+    name: defaulthttp
+    weight: "00"
+    block: |
+      <VirtualHost *:80>
+        ServerAdmin webmaster@localhost
+        DocumentRoot /var/www/html
+        {% if ansible_os_family == 'RedHat' %}
+        ErrorLog logs/defaulthttp.error_log
+        CustomLog logs/defaulthttp.access_log combined
+        {% elif ansible_os_family == 'Debian' %}
+        ErrorLog logs/defaulthttp.error.log
+        CustomLog logs/defaulthttp.access.log combined
+        {% endif %}
+      </VirtualHost>

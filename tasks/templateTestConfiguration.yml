@@ -1,0 +1,111 @@
+---
+- name: "TestingConfig - Create directories for apache configuration."
+  file:
+    state: "directory"
+    dest: "{{ item }}"
+    owner: "root"
+    group: "root"
+    mode: "0750"
+  with_items: "{{ aspects_apache24_test_configuration_directories_list }}"
+  tags:
+    - aspects_apache24
+    - aspects_apache24_configuration
+    - aspects_apache24_config
+
+- name: "TestingConfig - Symlink modules directory."
+  file:
+    state: "link"
+    src: "{{ aspects_apache24_modules_root }}"
+    dest: "{{ aspects_apache24_test_configuration_root }}/modules"
+  tags:
+    - aspects_apache24
+    - aspects_apache24_configuration
+    - aspects_apache24_config
+
+- name: "TestingConfig - Symlink logs directory."
+  file:
+    state: "link"
+    src: "{{ aspects_apache24_logs_root }}"
+    dest: "{{ aspects_apache24_test_configuration_root }}/logs"
+  tags:
+    - aspects_apache24
+    - aspects_apache24_configuration
+    - aspects_apache24_config
+
+
+- name: "TestingConfig - Template general configuration."
+  when: item.value.enabled
+  template:
+    dest: "{{ aspects_apache24_test_configuration_root }}/aspects.conf.d/{{ item.value.weight }}-{{ item.value.name }}.conf"
+    src: "general.conf.j2"
+    owner: "root"
+    group: "root"
+    mode: "0640"
+  with_dict: "{{ aspects_apache24_configuration_general }}"
+  register: inprocess_gen_conf_result
+  tags:
+    - aspects_apache24
+    - aspects_apache24_configuration
+    - aspects_apache24_config
+
+- name: "TestingConfig - Template module configuration."
+  when: item.value.enabled
+  template:
+    dest: "{{ aspects_apache24_test_configuration_root }}/aspects.mods.d/{{ item.value.weight }}-{{ item.value.name }}.conf"
+    src: "module.conf.j2"
+    owner: "root"
+    group: "root"
+    mode: "0640"
+  with_dict: "{{ aspects_apache24_configuration_modules }}"
+  register: inprocess_mod_conf_result
+  tags:
+    - aspects_apache24
+    - aspects_apache24_configuration
+    - aspects_apache24_config
+
+- name: "TestingConfig - Template VirtualHost configuration."
+  when: item.value.enabled
+  template:
+    dest: "{{ aspects_apache24_test_configuration_root }}/aspects.vhosts.d/{{ item.value.weight }}-{{ item.value.name }}.conf"
+    src: "vhost.conf.j2"
+    owner: "root"
+    group: "root"
+    mode: "0640"
+  with_dict: "{{ aspects_apache24_configuration_vhosts }}"
+  register: inprocess_vh_conf_result
+  tags:
+    - aspects_apache24
+    - aspects_apache24_configuration
+    - aspects_apache24_config
+
+- name: "TestingConfig - RedHat Family - Template main apache configuration file."
+  when: ansible_os_family == 'RedHat'
+  vars:
+    inprocess_testing: True
+  template:
+    dest: "{{ aspects_apache24_test_configuration_root }}/httpd.conf"
+    src: "main.conf.j2"
+    owner: "root"
+    group: "root"
+    mode: "0640"
+    validate: 'httpd -t -f %s'
+  tags:
+    - aspects_apache24
+    - aspects_apache24_configuration
+    - aspects_apache24_config
+
+- name: "TestingConfig - Debian Family - Template main apache configuration file."
+  when: ansible_os_family == 'Debian'
+  vars:
+    inprocess_testing: True
+  template:
+    dest: "{{ aspects_apache24_test_configuration_root }}/apache2.conf"
+    src: "main.conf.j2"
+    owner: "root"
+    group: "root"
+    mode: "0640"
+    validate: 'apache2 -t -f %s'
+  tags:
+    - aspects_apache24
+    - aspects_apache24_configuration
+    - aspects_apache24_config

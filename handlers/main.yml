@@ -1,63 +1,33 @@
 ---
-# file: roles/apache2/handlers/main.yml
-- name: restart apache2
+
+- name: "Restart Apache"
   service:
-    name: apache2
+    name: "{% if ansible_os_family == 'RedHat' %}httpd{% elif ansible_os_family == 'Debian' %}apache2{% endif %}"
     state: restarted
     enabled: yes
   tags:
   - aspects_apache24
 
-- name: reload apache2
+- name: "Reload Apache"
   service:
-    name: apache2
+    name: "{% if ansible_os_family == 'RedHat' %}httpd{% elif ansible_os_family == 'Debian' %}apache2{% endif %}"
     state: reloaded
     enabled: yes
   tags:
   - aspects_apache24
 
-- name: start apache2
+- name: "Start Apache"
   service:
-    name: apache2
+    name: "{% if ansible_os_family == 'RedHat' %}httpd{% elif ansible_os_family == 'Debian' %}apache2{% endif %}"
     state: started
     enabled: yes
   tags:
   - aspects_apache24
 
-- name: stop apache2
+- name: "Stop Apache"
   service:
-    name: apache2
+    name: "{% if ansible_os_family == 'RedHat' %}httpd{% elif ansible_os_family == 'Debian' %}apache2{% endif %}"
     state: stopped
-  tags:
-  - aspects_apache24
-
-- name: restart httpd
-  service:
-    name: httpd
-    state: restarted
-    enabled: yes
-  tags:
-  - aspects_apache24
-
-- name: reload httpd
-  service:
-    name: httpd
-    state: reloaded
-    enabled: yes
-  tags:
-  - aspects_apache24
-
-- name: start httpd
-  service:
-    name: httpd
-    state: started
-    enabled: yes
-  tags:
-  - aspects_apache24
-
-- name: stop httpd
-  service:
-    name: httpd
-    state: stopped
+    enabled: no
   tags:
   - aspects_apache24
