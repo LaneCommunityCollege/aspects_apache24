@@ -12,7 +12,7 @@
     - aspects_apache24_package_remove
 
 - name: "Import configuration tasks."
-  import_tasks: "configure.yml"
+  include_tasks: "configure.yml"
   tags:
     - aspects_apache24
     - aspects_apache24_configuration
@@ -22,7 +22,7 @@
   when: (ansible_selinux is defined and ansible_selinux != False) and
     ansible_selinux.status == "enabled" and
     aspects_apache24_selinux_change != False
-  import_tasks: "selinuxSettings.yml"
+  include_tasks: "selinuxSettings.yml"
   tags:
   - aspects_apache24
   - aspects_apache24_httpdconf
