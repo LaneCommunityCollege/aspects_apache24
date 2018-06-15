@@ -5,6 +5,8 @@
         and not aspects_apache24_httpdconf is defined
   tags:
   - aspects_apache24
+  - aspects_apache24_configuration
+  - aspects_apache24_config
 
 - name: "Old Configuration Detected."
   when: aspects_apache24_httpdconf is defined
