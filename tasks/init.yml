@@ -1,17 +1,5 @@
 ---
-- name: "install apache packages"
-  include_tasks: "{{ ansible_pkg_mgr}}InstallPackages.yml"
-  tags:
-    - aspects_apache24
-    - aspects_apache24_package_install
-
-- name: "remove apache packages"
-  include_tasks: "{{ ansible_pkg_mgr}}RemovePackages.yml"
-  tags:
-    - aspects_apache24
-    - aspects_apache24_package_remove
-
-- name: "Import configuration tasks."
+- name: "Include configuration tasks."
   include_tasks: "configure.yml"
   tags:
     - aspects_apache24
