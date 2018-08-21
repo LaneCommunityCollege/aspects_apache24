@@ -36,7 +36,7 @@
     - aspects_apache24_config
 
 - name: "ProdConfig - Template general configuration."
-  when: item.value.enabled
+  when: item.value.enabled == "True"
   template:
     dest: "{{ aspects_apache24_configuration_root }}/aspects.conf.d/{{ item.value.weight }}-{{ item.value.name }}.conf"
     src: "general.conf.j2"
@@ -50,8 +50,20 @@
     - aspects_apache24_configuration
     - aspects_apache24_config
 
+- name: "ProdConfig - Remove disabled general configuration."
+  when: item.value.enabled == "False"
+  file:
+    state: "absent"
+    path: "{{ aspects_apache24_configuration_root }}/aspects.conf.d/{{ item.value.weight }}-{{ item.value.name }}.conf"
+  with_dict: "{{ aspects_apache24_configuration_general }}"
+  notify: "Restart Apache"
+  tags:
+  - aspects_apache24
+  - aspects_apache24_configuration
+  - aspects_apache24_config
+
 - name: "ProdConfig - Template module configuration."
-  when: item.value.enabled
+  when: item.value.enabled == "True"
   template:
     dest: "{{ aspects_apache24_configuration_root }}/aspects.mods.d/{{ item.value.weight }}-{{ item.value.name }}.conf"
     src: "module.conf.j2"
@@ -65,8 +77,20 @@
     - aspects_apache24_configuration
     - aspects_apache24_config
 
+- name: "ProdConfig - Remove disabled module configuration."
+  when: item.value.enabled == "False"
+  file:
+    state: "absent"
+    path: "{{ aspects_apache24_configuration_root }}/aspects.mods.d/{{ item.value.weight }}-{{ item.value.name }}.conf"
+  with_dict: "{{ aspects_apache24_configuration_modules }}"
+  notify: "Restart Apache"
+  tags:
+  - aspects_apache24
+  - aspects_apache24_configuration
+  - aspects_apache24_config
+
 - name: "ProdConfig - Template VirtualHost configuration."
-  when: item.value.enabled
+  when: item.value.enabled == "True"
   template:
     dest: "{{ aspects_apache24_configuration_root }}/aspects.vhosts.d/{{ item.value.weight }}-{{ item.value.name }}.conf"
     src: "vhost.conf.j2"
@@ -79,6 +103,18 @@
     - aspects_apache24
     - aspects_apache24_configuration
     - aspects_apache24_config
+
+- name: "ProdConfig - Remove disabled VirtualHost configuration."
+  when: item.value.enabled == "False"
+  file:
+    state: "absent"
+    path: "{{ aspects_apache24_configuration_root }}/aspects.vhosts.d/{{ item.value.weight }}-{{ item.value.name }}.conf"
+  with_dict: "{{ aspects_apache24_configuration_vhosts }}"
+  notify: "Restart Apache"
+  tags:
+  - aspects_apache24
+  - aspects_apache24_configuration
+  - aspects_apache24_config
 
 - name: "ProdConfig - RedHat Family - Template main apache configuration file."
   when: ansible_os_family == 'RedHat'
