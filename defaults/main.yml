@@ -6,15 +6,18 @@ aspects_apache24_enabled: False
 aspects_apache24_selinux_change: False
 aspects_apache24_selinux_httpd_can_network_connect: True
 
-aspects_apache24_packages:
+aspects_packages_packages:
   apache2:
     state: "present"
     Ubuntu:
       1604: "apache2"
       1404: "apache2"
+      1804: "apache2"
     Debian:
       9: "apache2"
     CentOS:
+      7: "httpd"
+    OracleLinux:
       7: "httpd"
 
 aspects_apache24_test_configuration_root: "/opt/aspects_apache24_test_configuration"
@@ -36,7 +39,7 @@ aspects_apache24_logs_root: "{% if ansible_os_family == 'RedHat' %}/var/log/http
 
 
 aspects_apache24_base_modules: |
-  {% if ansible_distribution == 'CentOS' and ansible_distribution_major_version == '7' %}
+  {% if ansible_os_family == 'RedHat' and ansible_distribution_major_version == '7' %}
   LoadModule unixd_module modules/mod_unixd.so
   LoadModule log_config_module modules/mod_log_config.so
   LoadModule logio_module modules/mod_logio.so
@@ -211,7 +214,7 @@ aspects_apache24_configuration_general:
 
 aspects_apache24_configuration_modules:
   systemd:
-    enabled: "{% if ansible_distribution == 'CentOS' and ansible_distribution_major_version == '7' %}True{% else %}False{% endif %}"
+    enabled: "{% if ansible_os_family == 'RedHat' and ansible_distribution_major_version == '7' %}True{% else %}False{% endif %}"
     name: systemd
     weight: "00"
     block: |
