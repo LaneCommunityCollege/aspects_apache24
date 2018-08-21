@@ -1,14 +1,12 @@
 ---
-- name: "Import test configuration tasks."
-  vars:
-    aspects_apache24_configuration_root: "{{ aspects_apache24_test_configuration_root }}"
-  include_tasks: "templateTestConfiguration.yml"
-  tags:
-    - aspects_apache24
-    - aspects_apache24_configuration
-    - aspects_apache24_config
+#- name: "Import test configuration tasks."
+#  include_tasks: "templateTestConfiguration.yml"
+#  tags:
+#    - aspects_apache24
+#    - aspects_apache24_configuration
+#    - aspects_apache24_config
 
-- name: "Import prod configuration tasks."
+- name: "Include prod configuration tasks."
   include_tasks: "templateProdConfiguration.yml"
   tags:
     - aspects_apache24
