@@ -21,44 +21,6 @@ Flag to enable or disable changing selinux port options. Default is False.
 ### `aspects_apache24_selinux_httpd_can_network_connect`
 When `aspects_apache24_selinux_change` modify the `httpd_can_network_connect` SELinux boolean value. Set to true when True, set to false, when False. Default is True.
 
-### `aspects_apache24_packages`
-A dictionary/hash of packages to install.
-
-Use this pattern:
-
-```yaml
-aspects_apache24_packages:
-  <package key>:
-    state: "<present or latest>"
-    <ansible_distribution>:
-      <ansible_distribution_version or ansible_distribution_major_version>: "<package name>"
-```
-Set `state` to "default" if you wish to list a package but not install it.
-
-Set `state` to "absent" if you wish to remove a package.
-
-Check the [tasks/aptInstallpackages.yml](aptInstallpackages.yml) or [tasks/yumInstallPackages.yml](yumInstallPackages.yml) files to find out what values are accepted for the `ansible_distribution_*` variables.
-
-
-For example:
-
-```yaml
-aspects_apache24_packages:
-  apache2:
-    state: "present"
-    Ubuntu:
-      1604: "apache2"
-      1404: "apache2"
-    Debian:
-      9: "apache2"
-    CentOS:
-      7: "httpd"
-  mod_ssl:
-    state: "present"
-    CentOS:
-      7: "mod_ssl"
-```
-
 ### `aspects_apache24_listen_ports`
 A list of ports that selinux should allow apache to listen on.
 
@@ -225,6 +187,9 @@ Blocks of apache vhost configuration. Use this to add new vhosts. These are sort
 ### `aspects_apache24_other_vhosts_log_enable` (deprecated)
 On Debian family systems, enable or disable the other_vhosts.log file. Default is True for enabled. Set to False for disabled. Needs a manual apache restart to apply changes.
 
+## Dependencies
+### aspects_packages
+[aspects_packages](https://github.com/LaneCommunityCollege/aspects_packages) is used to manage system packages.
 
 ## Example Playbook 
 ```yaml
@@ -233,8 +198,9 @@ On Debian family systems, enable or disable the other_vhosts.log file. Default i
       roles:
       - aspects_apache24
       vars:
+        aspects_packages_enabled: True
         aspects_apache24_enabled: True
-        aspects_apache24_packages:
+        aspects_packages_packages:
           modauthcas:
             state: "latest"
             Ubuntu:
