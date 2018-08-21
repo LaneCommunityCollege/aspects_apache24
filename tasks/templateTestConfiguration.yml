@@ -11,6 +11,7 @@
     - aspects_apache24
     - aspects_apache24_configuration
     - aspects_apache24_config
+    - aspects_apache24_config_test
 
 - name: "TestingConfig - Symlink modules directory."
   file:
@@ -21,6 +22,7 @@
     - aspects_apache24
     - aspects_apache24_configuration
     - aspects_apache24_config
+    - aspects_apache24_config_test
 
 - name: "TestingConfig - Symlink logs directory."
   file:
@@ -31,10 +33,10 @@
     - aspects_apache24
     - aspects_apache24_configuration
     - aspects_apache24_config
-
+    - aspects_apache24_config_test
 
 - name: "TestingConfig - Template general configuration."
-  when: item.value.enabled == "True"
+  when: item.value.enabled == True or item.value.enabled == "True"
   template:
     dest: "{{ aspects_apache24_test_configuration_root }}/aspects.conf.d/{{ item.value.weight }}-{{ item.value.name }}.conf"
     src: "general.conf.j2"
@@ -42,24 +44,28 @@
     group: "root"
     mode: "0640"
   with_dict: "{{ aspects_apache24_configuration_general }}"
+  register: inprocess_gen_conf_result
   tags:
     - aspects_apache24
     - aspects_apache24_configuration
     - aspects_apache24_config
+    - aspects_apache24_config_test
 
 - name: "TestingConfig - Remove disabled general configuration."
-  when: item.value.enabled == "False"
+  when: item.value.enabled == False or item.value.enabled == "False"
   file:
     state: "absent"
     path: "{{ aspects_apache24_test_configuration_root }}/aspects.conf.d/{{ item.value.weight }}-{{ item.value.name }}.conf"
   with_dict: "{{ aspects_apache24_configuration_general }}"
+  register: inprocess_rm_gen_conf_result
   tags:
-  - aspects_apache24
-  - aspects_apache24_configuration
-  - aspects_apache24_config
+    - aspects_apache24
+    - aspects_apache24_configuration
+    - aspects_apache24_config
+    - aspects_apache24_config_test
 
 - name: "TestingConfig - Template module configuration."
-  when: item.value.enabled == "True"
+  when: item.value.enabled == True or item.value.enabled == "True"
   template:
     dest: "{{ aspects_apache24_test_configuration_root }}/aspects.mods.d/{{ item.value.weight }}-{{ item.value.name }}.conf"
     src: "module.conf.j2"
@@ -67,24 +73,28 @@
     group: "root"
     mode: "0640"
   with_dict: "{{ aspects_apache24_configuration_modules }}"
+  register: inprocess_mod_conf_result
   tags:
     - aspects_apache24
     - aspects_apache24_configuration
     - aspects_apache24_config
+    - aspects_apache24_config_test
 
 - name: "TestingConfig - Remove disabled module configuration."
-  when: item.value.enabled == "False"
+  when: item.value.enabled == False or item.value.enabled == "False"
   file:
     state: "absent"
     path: "{{ aspects_apache24_test_configuration_root }}/aspects.mods.d/{{ item.value.weight }}-{{ item.value.name }}.conf"
   with_dict: "{{ aspects_apache24_configuration_modules }}"
+  register: inprocess_rm_mod_conf_result
   tags:
-  - aspects_apache24
-  - aspects_apache24_configuration
-  - aspects_apache24_config
+    - aspects_apache24
+    - aspects_apache24_configuration
+    - aspects_apache24_config
+    - aspects_apache24_config_test
 
 - name: "TestingConfig - Template VirtualHost configuration."
-  when: item.value.enabled == "True"
+  when: item.value.enabled == True or item.value.enabled == "True"
   template:
     dest: "{{ aspects_apache24_test_configuration_root }}/aspects.vhosts.d/{{ item.value.weight }}-{{ item.value.name }}.conf"
     src: "vhost.conf.j2"
@@ -92,24 +102,30 @@
     group: "root"
     mode: "0640"
   with_dict: "{{ aspects_apache24_configuration_vhosts }}"
+  register: inprocess_vh_conf_result
   tags:
     - aspects_apache24
     - aspects_apache24_configuration
     - aspects_apache24_config
+    - aspects_apache24_config_test
 
 - name: "TestingConfig - Remove disabled VirtualHost configuration."
-  when: item.value.enabled == "False"
+  when: item.value.enabled == False or item.value.enabled == "False"
   file:
     state: "absent"
     path: "{{ aspects_apache24_test_configuration_root }}/aspects.vhosts.d/{{ item.value.weight }}-{{ item.value.name }}.conf"
   with_dict: "{{ aspects_apache24_configuration_vhosts }}"
+  register: inprocess_rm_vh_conf_result
   tags:
-  - aspects_apache24
-  - aspects_apache24_configuration
-  - aspects_apache24_config
+    - aspects_apache24
+    - aspects_apache24_configuration
+    - aspects_apache24_config
+    - aspects_apache24_config_test
 
 - name: "TestingConfig - RedHat Family - Template main apache configuration file."
   when: ansible_os_family == 'RedHat'
+  vars:
+    aspects_apache24_configuration_root: "{{ aspects_apache24_test_configuration_root }}"
   template:
     dest: "{{ aspects_apache24_test_configuration_root }}/httpd.conf"
     src: "main.conf.j2"
@@ -122,9 +138,12 @@
     - aspects_apache24
     - aspects_apache24_configuration
     - aspects_apache24_config
+    - aspects_apache24_config_test
 
 - name: "TestingConfig - Debian Family - Template main apache configuration file."
   when: ansible_os_family == 'Debian'
+  vars:
+    aspects_apache24_configuration_root: "{{ aspects_apache24_test_configuration_root }}"
   template:
     dest: "{{ aspects_apache24_test_configuration_root }}/apache2.conf"
     src: "main.conf.j2"
@@ -137,3 +156,4 @@
     - aspects_apache24
     - aspects_apache24_configuration
     - aspects_apache24_config
+    - aspects_apache24_config_test

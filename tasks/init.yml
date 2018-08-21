@@ -5,6 +5,8 @@
     - aspects_apache24
     - aspects_apache24_configuration
     - aspects_apache24_config
+    - aspects_apache24_config_test
+    - aspects_apache24_config_prod
 
 - name: "Include selinuxSettings tasks"
   when: (ansible_selinux is defined and ansible_selinux != False) and

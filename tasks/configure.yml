@@ -1,14 +1,17 @@
 ---
-#- name: "Import test configuration tasks."
-#  include_tasks: "templateTestConfiguration.yml"
-#  tags:
-#    - aspects_apache24
-#    - aspects_apache24_configuration
-#    - aspects_apache24_config
+- name: "Import test configuration tasks."
+  include_tasks: "templateTestConfiguration.yml"
+  tags:
+    - aspects_apache24
+    - aspects_apache24_configuration
+    - aspects_apache24_config
+    - aspects_apache24_config_test
 
 - name: "Include prod configuration tasks."
+#  when: not inprocess_validation_result is defined
   include_tasks: "templateProdConfiguration.yml"
   tags:
     - aspects_apache24
     - aspects_apache24_configuration
     - aspects_apache24_config
+    - aspects_apache24_config_prod

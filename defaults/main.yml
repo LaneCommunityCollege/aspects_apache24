@@ -48,7 +48,7 @@ aspects_apache24_base_modules: |
 
 aspects_apache24_configuration_general:
   keepalive:
-    enabled: "True"
+    enabled: True
     weight: "00"
     name: "keepalive"
     block: |
@@ -122,9 +122,9 @@ aspects_apache24_configuration_general:
           Require all granted
       </Directory>
       #<Directory /srv/>
-      #	Options Indexes FollowSymLinks
-      #	AllowOverride None
-      #	Require all granted
+      #    Options Indexes FollowSymLinks
+      #    AllowOverride None
+      #    Require all granted
       #</Directory>
       #
       # DirectoryIndex: sets the file that Apache will serve if a directory
@@ -214,7 +214,7 @@ aspects_apache24_configuration_general:
 
 aspects_apache24_configuration_modules:
   systemd:
-    enabled: "{% if ansible_os_family == 'RedHat' and ansible_distribution_major_version == '7' %}True{% else %}False{% endif %}"
+    enabled: "{% if ansible_distribution_major_version == '7' %}True{% else %}False{% endif %}"
     name: systemd
     weight: "00"
     block: |
@@ -227,16 +227,16 @@ aspects_apache24_configuration_modules:
     block: |
       LoadModule mpm_prefork_module modules/mod_mpm_prefork.so
       <IfModule mpm_prefork_module>
-      	StartServers			 5
-      	MinSpareServers		  5
-      	MaxSpareServers		 10
-      	MaxRequestWorkers	  150
-      	MaxConnectionsPerChild   0
+          StartServers             5
+          MinSpareServers          5
+          MaxSpareServers         10
+          MaxRequestWorkers      150
+          MaxConnectionsPerChild   0
       </IfModule>
   mimemagic:
     enabled: True
     name: mimemagic
-    weight: "00"
+    weight: "01"
     block: |
       LoadModule mime_magic_module modules/mod_mime_magic.so
       <IfModule mime_magic_module>
