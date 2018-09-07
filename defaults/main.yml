@@ -131,7 +131,7 @@ aspects_apache24_configuration_general:
       # is requested.
       #
       <IfModule dir_module>
-          DirectoryIndex index.html
+          DirectoryIndex index.html index.htm index.php
       </IfModule>
   htfiles:
     enabled: True
@@ -262,7 +262,7 @@ aspects_apache24_configuration_modules:
       # is requested.
       #
       <IfModule dir_module>
-          DirectoryIndex index.html
+          DirectoryIndex index.html index.htm index.php
       </IfModule>
 
 aspects_apache24_configuration_vhosts:
