@@ -94,7 +94,7 @@
   - aspects_apache24
   - aspects_apache24_configuration
   - aspects_apache24_config
-    - aspects_apache24_config_prod
+  - aspects_apache24_config_prod
 
 - name: "ProdConfig - Template VirtualHost configuration."
   when: item.value.enabled == True or item.value.enabled == "True"
@@ -123,7 +123,7 @@
   - aspects_apache24
   - aspects_apache24_configuration
   - aspects_apache24_config
-    - aspects_apache24_config_prod
+  - aspects_apache24_config_prod
 
 - name: "ProdConfig - RedHat Family - Template main apache configuration file."
   when: ansible_os_family == 'RedHat'
