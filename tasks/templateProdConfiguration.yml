@@ -6,7 +6,7 @@
     owner: "root"
     group: "root"
     mode: "0750"
-  with_items: "{{ aspects_apache24_configuration_directories_list }}"
+  loop: "{{ aspects_apache24_configuration_directories_list }}"
   notify: "Restart Apache"
   tags:
     - aspects_apache24
@@ -46,7 +46,7 @@
     owner: "root"
     group: "root"
     mode: "0640"
-  with_dict: "{{ aspects_apache24_configuration_general }}"
+  loop: "{{ aspects_apache24_configuration_general|dict2items }}"
   notify: "Restart Apache"
   tags:
     - aspects_apache24
@@ -59,7 +59,7 @@
   file:
     state: "absent"
     path: "{{ aspects_apache24_configuration_root }}/aspects.conf.d/{{ item.value.weight }}-{{ item.value.name }}.conf"
-  with_dict: "{{ aspects_apache24_configuration_general }}"
+  loop: "{{ aspects_apache24_configuration_general|dict2items }}"
   notify: "Restart Apache"
   tags:
     - aspects_apache24
@@ -75,7 +75,7 @@
     owner: "root"
     group: "root"
     mode: "0640"
-  with_dict: "{{ aspects_apache24_configuration_modules }}"
+  loop: "{{ aspects_apache24_configuration_modules|dict2items }}"
   notify: "Restart Apache"
   tags:
     - aspects_apache24
@@ -88,7 +88,7 @@
   file:
     state: "absent"
     path: "{{ aspects_apache24_configuration_root }}/aspects.mods.d/{{ item.value.weight }}-{{ item.value.name }}.conf"
-  with_dict: "{{ aspects_apache24_configuration_modules }}"
+  loop: "{{ aspects_apache24_configuration_modules|dict2items }}"
   notify: "Restart Apache"
   tags:
   - aspects_apache24
@@ -104,7 +104,7 @@
     owner: "root"
     group: "root"
     mode: "0640"
-  with_dict: "{{ aspects_apache24_configuration_vhosts }}"
+  loop: "{{ aspects_apache24_configuration_vhosts|dict2items }}"
   notify: "Restart Apache"
   tags:
     - aspects_apache24
@@ -117,7 +117,7 @@
   file:
     state: "absent"
     path: "{{ aspects_apache24_configuration_root }}/aspects.vhosts.d/{{ item.value.weight }}-{{ item.value.name }}.conf"
-  with_dict: "{{ aspects_apache24_configuration_vhosts }}"
+  loop: "{{ aspects_apache24_configuration_vhosts|dict2items }}"
   notify: "Restart Apache"
   tags:
   - aspects_apache24

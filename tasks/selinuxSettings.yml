@@ -4,7 +4,7 @@
   yum:
     name: "{{ item }}"
     state: "present"
-  with_items:
+  loop:
     - "policycoreutils-python"
     - "libselinux-python"
   tags:
@@ -18,7 +18,7 @@
     ports: "{{ item }}"
     proto: tcp
     setype: http_port_t
-  with_items: "{{ aspects_apache24_listen_ports|default({}) }}"
+  loop: "{{ aspects_apache24_listen_ports|default([]) }}"
   tags:
   - aspects_apache24
   - aspects_apache24_httpdconf

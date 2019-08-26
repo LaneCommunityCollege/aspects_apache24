@@ -11,7 +11,6 @@ aspects_packages_packages:
     state: "present"
     Ubuntu:
       1604: "apache2"
-      1404: "apache2"
       1804: "apache2"
     Debian:
       9: "apache2"
