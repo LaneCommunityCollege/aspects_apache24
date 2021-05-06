@@ -39,14 +39,14 @@
     - aspects_apache24_config_prod
 
 - name: "ProdConfig - Template general configuration."
-  when: item.value.enabled == True or item.value.enabled == "True"
+  when: item.1.enabled == True or item.1.enabled == "True"
   template:
-    dest: "{{ aspects_apache24_configuration_root }}/aspects.conf.d/{{ item.value.weight }}-{{ item.value.name }}.conf"
+    dest: "{{ aspects_apache24_configuration_root }}/aspects.conf.d/{{ item.1.weight }}-{{ item.1.name }}.conf"
     src: "general.conf.j2"
     owner: "root"
     group: "root"
     mode: "0640"
-  loop: "{{ aspects_apache24_configuration_general|dict2items }}"
+  loop: "{{ aspects_apache24_configuration_general | dictsort }}"
   notify: "Restart Apache"
   tags:
     - aspects_apache24
@@ -55,11 +55,11 @@
     - aspects_apache24_config_prod
 
 - name: "ProdConfig - Remove disabled general configuration."
-  when: item.value.enabled == False or item.value.enabled == "False"
+  when: item.1.enabled == False or item.1.enabled == "False"
   file:
     state: "absent"
-    path: "{{ aspects_apache24_configuration_root }}/aspects.conf.d/{{ item.value.weight }}-{{ item.value.name }}.conf"
-  loop: "{{ aspects_apache24_configuration_general|dict2items }}"
+    path: "{{ aspects_apache24_configuration_root }}/aspects.conf.d/{{ item.1.weight }}-{{ item.1.name }}.conf"
+  loop: "{{ aspects_apache24_configuration_general | dictsort }}"
   notify: "Restart Apache"
   tags:
     - aspects_apache24
@@ -68,14 +68,14 @@
     - aspects_apache24_config_prod
 
 - name: "ProdConfig - Template module configuration."
-  when: item.value.enabled == True or item.value.enabled == "True"
+  when: item.1.enabled == True or item.1.enabled == "True"
   template:
-    dest: "{{ aspects_apache24_configuration_root }}/aspects.mods.d/{{ item.value.weight }}-{{ item.value.name }}.conf"
+    dest: "{{ aspects_apache24_configuration_root }}/aspects.mods.d/{{ item.1.weight }}-{{ item.1.name }}.conf"
     src: "module.conf.j2"
     owner: "root"
     group: "root"
     mode: "0640"
-  loop: "{{ aspects_apache24_configuration_modules|dict2items }}"
+  loop: "{{ aspects_apache24_configuration_modules | dictsort }}"
   notify: "Restart Apache"
   tags:
     - aspects_apache24
@@ -84,11 +84,11 @@
     - aspects_apache24_config_prod
 
 - name: "ProdConfig - Remove disabled module configuration."
-  when: item.value.enabled == False or item.value.enabled == "False"
+  when: item.1.enabled == False or item.1.enabled == "False"
   file:
     state: "absent"
-    path: "{{ aspects_apache24_configuration_root }}/aspects.mods.d/{{ item.value.weight }}-{{ item.value.name }}.conf"
-  loop: "{{ aspects_apache24_configuration_modules|dict2items }}"
+    path: "{{ aspects_apache24_configuration_root }}/aspects.mods.d/{{ item.1.weight }}-{{ item.1.name }}.conf"
+  loop: "{{ aspects_apache24_configuration_modules | dictsort }}"
   notify: "Restart Apache"
   tags:
   - aspects_apache24
@@ -97,14 +97,14 @@
   - aspects_apache24_config_prod
 
 - name: "ProdConfig - Template VirtualHost configuration."
-  when: item.value.enabled == True or item.value.enabled == "True"
+  when: item.1.enabled == True or item.1.enabled == "True"
   template:
-    dest: "{{ aspects_apache24_configuration_root }}/aspects.vhosts.d/{{ item.value.weight }}-{{ item.value.name }}.conf"
+    dest: "{{ aspects_apache24_configuration_root }}/aspects.vhosts.d/{{ item.1.weight }}-{{ item.1.name }}.conf"
     src: "vhost.conf.j2"
     owner: "root"
     group: "root"
     mode: "0640"
-  loop: "{{ aspects_apache24_configuration_vhosts|dict2items }}"
+  loop: "{{ aspects_apache24_configuration_vhosts | dictsort }}"
   notify: "Restart Apache"
   tags:
     - aspects_apache24
@@ -113,11 +113,11 @@
     - aspects_apache24_config_prod
 
 - name: "ProdConfig - Remove disabled VirtualHost configuration."
-  when: item.value.enabled == False or item.value.enabled == "False"
+  when: item.1.enabled == False or item.1.enabled == "False"
   file:
     state: "absent"
-    path: "{{ aspects_apache24_configuration_root }}/aspects.vhosts.d/{{ item.value.weight }}-{{ item.value.name }}.conf"
-  loop: "{{ aspects_apache24_configuration_vhosts|dict2items }}"
+    path: "{{ aspects_apache24_configuration_root }}/aspects.vhosts.d/{{ item.1.weight }}-{{ item.1.name }}.conf"
+  loop: "{{ aspects_apache24_configuration_vhosts | dictsort }}"
   notify: "Restart Apache"
   tags:
   - aspects_apache24
