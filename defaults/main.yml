@@ -15,6 +15,7 @@ aspects_packages_packages:
       2004: "apache2"
     Debian:
       9: "apache2"
+      10: "apache2"
     CentOS:
       7: "httpd"
     OracleLinux:
