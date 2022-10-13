@@ -12,6 +12,7 @@ aspects_packages_packages:
     Ubuntu:
       1804: "apache2"
       2004: "apache2"
+      2204: "apache2"
     Debian:
       10: "apache2"
     CentOS:
