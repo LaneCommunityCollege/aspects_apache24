@@ -14,7 +14,6 @@
 # {{ ansible_date_time.epoch }}
 {% endif %}
 ServerRoot {{ aspects_apache24_configuration_root }}
-
 {% if ansible_os_family == "RedHat" %}
 PidFile /run/httpd/httpd.pid
 {% elif ansible_os_family == "Debian" %}
